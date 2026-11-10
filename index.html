@@ -1,303 +1,109 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warp Game Arcade - คลังมินิเกมสุดมันส์</title>
-    <style>
-        /* 1. Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            line-height: 1.6;
-            padding-bottom: 4rem;
-        }
-
-        /* 2. Header Style */
-        header {
-            background: linear-gradient(135deg, #1e1b4b, #311042);
-            border-bottom: 3px solid #a855f7;
-            text-align: center;
-            padding: 4rem 1rem;
-            margin-bottom: 2.5rem;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            color: #c084fc;
-            text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
-        }
-
-        header p {
-            font-size: 1.2rem;
-            color: #94a3b8;
-        }
-
-        /* 3. Filter Buttons Style */
-        .filter-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 2.5rem;
-            flex-wrap: wrap;
-            padding: 0 1rem;
-        }
-
-        .btn {
-            background-color: #1e293b;
-            border: 2px solid #a855f7;
-            color: #c084fc;
-            padding: 0.7rem 1.8rem;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn:hover, .btn.active {
-            background-color: #a855f7;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
-        }
-
-        /* 4. Gallery & Cards Style (CSS Grid) */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        .card {
-            background-color: #1e293b;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            border: 1px solid #334155;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: #a855f7;
-            box-shadow: 0 12px 30px rgba(168, 85, 247, 0.3);
-        }
-
-        .card-img-placeholder {
-            width: 100%;
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.5rem;
-        }
-
-        .card.casual .card-img-placeholder { background: linear-gradient(45deg, #10b981, #3b82f6); }
-        .card.gacha .card-img-placeholder { background: linear-gradient(45deg, #ec4899, #8b5cf6); }
-        .card.rpg .card-img-placeholder { background: linear-gradient(45deg, #ef4444, #f59e0b); }
-
-        .card-content {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .card-tag {
-            align-self: flex-start;
-            background-color: #334155;
-            color: #cbd5e1;
-            padding: 0.2rem 0.8rem;
-            font-size: 0.8rem;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-bottom: 0.8rem;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: #f1f5f9;
-        }
-
-        .card-text {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-
-        .play-now-btn {
-            background-color: #a855f7;
-            color: white;
-            border: none;
-            padding: 0.6rem;
-            border-radius: 6px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        /* 5. Pop-up Game Window (Modal) */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 23, 42, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .modal-content {
-            background-color: #1e293b;
-            border: 2px solid #a855f7;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem;
-            position: relative;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #94a3b8;
-        }
-        .close-btn:hover { color: #ef4444; }
-
-        .game-screen {
-            background-color: #0f172a;
-            border-radius: 12px;
-            padding: 2rem 1rem;
-            margin: 1.5rem 0;
-            border: 1px dashed #475569;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .game-action-btn {
-            background-color: #10b981;
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            width: 80%;
-            margin-top: 10px;
-        }
-        .game-action-btn:hover { background-color: #059669; }
-
-        @media (max-width: 480px) {
-            header h1 { font-size: 2.2rem; }
-            .gallery { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สารานุกรมสัตว์โลกน่ารู้ | Animal Encyclopedia</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Kanit', sans-serif; }
+  </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
-    <!-- ส่วนหัวเว็บ -->
-    <header>
-        <h1>Warp Game Arcade 🎮</h1>
-        <p>คลังมินิเกมสุดมันส์ กรองหมวดหมู่และคลิกการ์ดเพื่อเปิดเล่นเกมได้เลย!</p>
-    </header>
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white py-12 px-4 shadow-lg">
+    <div class="max-w-6xl mx-auto text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-3 hover:scale-105 transition-transform duration-300 inline-block">
+        🐾 สารานุกรมสัตว์โลกน่ารู้
+      </h1>
+      <p class="text-emerald-100 text-lg md:text-xl max-w-2xl mx-auto font-light">
+        สำรวจและเรียนรู้เรื่องราวของเหล่าสัตว์น่ารักและน่าสนใจทั่วทุกมุมโลก พร้อมระบบกรองข้อมูลแบบโต้ตอบ
+      </p>
+    </div>
+  </header>
 
-    <!-- ปุ่มกรองหมวดหมู่ -->
-    <div class="filter-container">
-        <button class="btn active" onclick="filterSelection('all')">ทั้งหมด</button>
-        <button class="btn" onclick="filterSelection('casual')">เกมเล่นชิลๆ (Casual)</button>
-        <button class="btn" onclick="filterSelection('gacha')">เกมเสี่ยงดวง (Gacha)</button>
-        <button class="btn" onclick="filterSelection('rpg')">เกมต่อสู้ (RPG)</button>
+  <!-- Main Content Area -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+    
+    <!-- Search & Filter Controls -->
+    <div class="mb-10 flex flex-col md:flex-row gap-4 items-center justify-between bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
+      
+      <!-- Category Buttons -->
+      <div class="flex flex-wrap gap-2 justify-center md:justify-start" id="filter-buttons">
+        <button onclick="filterCategory('all')" class="filter-btn active bg-emerald-600 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm hover:bg-emerald-700 transition-all duration-200" data-category="all">
+          <i class="fa-solid fa-border-all mr-1.5"></i>ทั้งหมด
+        </button>
+        <button onclick="filterCategory('mammal')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200" data-category="mammal">
+          <i class="fa-solid fa-dog mr-1.5"></i>สัตว์เลี้ยงลูกด้วยนม
+        </button>
+        <button onclick="filterCategory('bird')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200" data-category="bird">
+          <i class="fa-solid fa-crow mr-1.5"></i>สัตว์ปีก
+        </button>
+        <button onclick="filterCategory('reptile')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200" data-category="reptile">
+          <i class="fa-solid fa-dragon mr-1.5"></i>สัตว์เลื้อยคลาน
+        </button>
+        <button onclick="filterCategory('aquatic')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-5 py-2.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200" data-category="aquatic">
+          <i class="fa-solid fa-fish mr-1.5"></i>สัตว์น้ำ/ครึ่งบกครึ่งน้ำ
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full md:w-64">
+        <input type="text" id="search-input" onkeyup="searchAnimals()" placeholder="ค้นหาชื่อสัตว์..." 
+          class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
+      </div>
+
     </div>
 
-    <!-- คลังการ์ดเกม (Gallery - 6 ชิ้นตามโจทก์กำหนด) -->
-    <main class="gallery">
-        
-        <!-- เกมที่ 1 (Casual) -->
-        <div class="card casual" onclick="openGame('cookie')">
-            <div class="card-img-placeholder">🍪</div>
-            <div class="card-content">
-                <span class="card-tag">Casual</span>
-                <h3 class="card-title">Cookie Clicker Sim</h3>
-                <p class="card-text">เกมคลิกนิ้วรัวๆ กดอบคุกกี้เพื่อสะสมแต้มให้ได้มากที่สุด!</p>
-                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
-            </div>
+    <!-- Gallery Grid -->
+    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Card 1: หมาป่าสีเทา -->
+      <div class="animal-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 hover:-translate-y-1 cursor-pointer" data-category="mammal" data-name="หมาป่าสีเทา grey wolf" onclick="openModal('หมาป่าสีเทา', 'Canis lupus', 'สัตว์เลี้ยงลูกด้วยนม', 'ป่าไม้และทุ่งหญ้าหนาวเหน็บ', 'เนื้อสัตว์ (ล่าเป็นฝูง)', 'สัตว์สังคมที่มีโครงสร้างฝูงเข้มงวดและสื่อสารด้วยการหอนอย่างมีเอกลักษณ์', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?w=600&auto=format&fit=crop')">
+        <div class="relative overflow-hidden h-48">
+          <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?w=600&auto=format&fit=crop" alt="หมาป่าสีเทา" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+          <span class="absolute top-3 right-3 bg-emerald-500/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full">สัตว์เลี้ยงลูกด้วยนม</span>
         </div>
-
-        <!-- เกมที่ 2 (Casual) -->
-        <div class="card casual" onclick="openGame('timer')">
-            <div class="card-img-placeholder">⏱️</div>
-            <div class="card-content">
-                <span class="card-tag">Casual</span>
-                <h3 class="card-title">Stopwatch 10.00s</h3>
-                <p class="card-text">เกมฝึกประสาทสัมผัส กดหยุดเวลาให้ใกล้เคียงกับ 10.00 วินาทีพอดีเป๊ะ!</p>
-                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
-            </div>
+        <div class="p-5">
+          <h3 class="text-xl font-bold text-slate-800 mb-1">หมาป่าสีเทา</h3>
+          <p class="text-slate-500 text-xs italic mb-3">Canis lupus</p>
+          <p class="text-slate-600 text-sm line-clamp-2">นักล่าผู้งดงามแห่งพงไพร รวมฝูงอย่างมีระเบียบและสื่อสารกันด้วยการหอนอันทรงพลัง</p>
         </div>
+      </div>
 
-        <!-- เกมที่ 3 (Gacha) -->
-        <div class="card gacha" onclick="openGame('gachaHero')">
-            <div class="card-img-placeholder">💎</div>
-            <div class="card-content">
-                <span class="card-tag">Gacha</span>
-                <h3 class="card-title">Gacha Hero Arena</h3>
-                <p class="card-text">ตามหาฮีโร่ในตำนาน! กดสุ่มเพื่อสะสมการ์ดระดับ UR และ SSR เพื่อวัดระดับดวง</p>
-                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
-            </div>
+      <!-- Card 2: นกเพนกวินจักรพรรดิ -->
+      <div class="animal-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 hover:-translate-y-1 cursor-pointer" data-category="bird" data-name="นกเพนกวินจักรพรรดิ emperor penguin" onclick="openModal('นกเพนกวินจักรพรรดิ', 'Aptenodytes forsteri', 'สัตว์ปีก', 'ทวีปแอนตาร์กติกา (ขั้วโลกใต้)', 'ปลา ปลาหมึก และคริลล์', 'นกเพนกวินสายพันธุ์ที่สูงและหนักที่สุด ทนทานต่ออากาศหนาวสุดขั้วโดยเพนกวินตัวผู้จะเป็นผู้กกไข่', 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?w=600&auto=format&fit=crop')">
+        <div class="relative overflow-hidden h-48">
+          <img src="https://images.unsplash.com/photo-1598439210625-5067c578f3f6?w=600&auto=format&fit=crop" alt="นกเพนกวินจักรพรรดิ" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+          <span class="absolute top-3 right-3 bg-sky-500/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full">สัตว์ปีก</span>
         </div>
-
-        <!-- เกมที่ 4 (Gacha) -->
-        <div class="card gacha" onclick="openGame('luckyBox')">
-            <div class="card-img-placeholder">🎁</div>
-            <div class="card-content">
-                <span class="card-tag">Gacha</span>
-                <h3 class="card-title">Lucky Box</h3>
-                <p class="card-text">กล่องสุ่มปริศนา เลือกกล่องนำโชคเพื่อลุ้นรับรางวัลใหญ่</p>
-                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
-            </div>
+        <div class="p-5">
+          <h3 class="text-xl font-bold text-slate-800 mb-1">นกเพนกวินจักรพรรดิ</h3>
+          <p class="text-slate-500 text-xs italic mb-3">Aptenodytes forsteri</p>
+          <p class="text-slate-600 text-sm line-clamp-2">เจ้านกบินไม่ได้แห่งขั้วโลกใต้ ทนทานความหนาวเย็นและรักเดียวใจเดียว</p>
         </div>
+      </div>
 
-        <!-- เกมที่ 5 (RPG) -->
-        <div class="card rpg" onclick="openGame('slime')">
-            <div class="card-img-placeholder">👾</div>
-            <div class="card-content">
-                <span class="card-tag">RPG</span>
-                <h3 class="card-title">Slime Slayer</h3>
-                <p class="card-text">สวมบทจอมดาบออกปราบฝูงสไลม์บุกเมือง โจมตีลด HP ของมอนสเตอร์ลงให้เป็น 0</p>
-                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
-            </div>
+      <!-- Card 3: กิ้งก่าคาเมเลียน -->
+      <div class="animal-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 hover:-translate-y-1 cursor-pointer" data-category="reptile" data-name="กิ้งก่าคาเมเลียน chameleon" onclick="openModal('กิ้งก่าคาเมเลียน', 'Chamaeleonidae', 'สัตว์เลื้อยคลาน', 'ป่าดงดิบและทะเลทราย (มาดากัสการ์)', 'แมลงต่างๆ', 'สามารถเปลี่ยนสีผิวเพื่อการสื่อสารและพรางตัว ตาหมุนได้ 360 องศาแยกอิสระจากกัน', 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=600&auto=format&fit=crop')">
+        <div class="relative overflow-hidden h-48">
+          <img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=600&auto=format&fit=crop" alt="กิ้งก่าคาเมเลียน" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+          <span class="absolute top-3 right-3 bg-amber-500/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full">สัตว์เลื้อยคลาน</span>
         </div>
+        <div class="p-5">
+          <h3 class="text-xl font-bold text-slate-800 mb-1">กิ้งก่าคาเมเลียน</h3>
+          <p class="text-slate-500 text-xs italic mb-3">Chamaeleonidae</p>
+          <p class="text-slate-600 text-sm line-clamp-2">ผู้เชี่ยวชาญด้านการพรางตัว เปลี่ยนสีตามอารมณ์และสิ่งแวดล้อมได้ตระการตา</p>
+        </div>
+      </div>
 
-        <!-- เกมที่ 6 (RPG) -->
-        <div class="card rpg" onclick="openGame('dungeon')">
-            <div class="card-img-placeholder">🐲</div>
-            <div class="card-content">
-                <span class="card-tag">RPG</span>
-                <h3 class="card-title">Dungeon Clicker</h3>
-                <p class="card-text">บุกตะลุยดันเจี้ยนมังกรเพลิง คลิกโจมตีบอสใหญ่เพื่อฟาร์มเหรียญทองมาอัปเกรดพลัง</p>
+      <!-- Card 4: โลมาปากขวด -->
+      <div class="animal-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 hover:-translate-y-1 cursor-pointer" data-category="aquatic" data-name="โลมาปากขวด bottlenose dolphin" onclick="openModal('โลมาปากขวด', 'Tursiops truncatus', 'สัตว์น้ำ/ครึ่งบกครึ่งน้ำ', 'มหาสมุทรเขตอบอุ่นทั่วโลก', 'ปลา และหมึก', 'สัตว์น้ำสายพันธุ์สติปัญญาเลิศ มีระบบสะท้อนคลื่นเสียง (Echolocation) ในการนำทางและล่าเหยื่อ', 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=600&auto=format&fit=crop')">
+        <div class="relative overflow-hidden h-48">
+          <img src="https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=600&auto=format&fit=crop" alt="โลมาปากขวด" class="w-full h-full object-cover hover:scale-11
