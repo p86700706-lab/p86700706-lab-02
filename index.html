@@ -3,240 +3,218 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>สุดยอดสารานุกรมสัตว์โลกมหัศจรรย์ | Ultimate Wild Wonders</title>
+  <title>GameVerse - ศูนย์รวมเกมฮิตน่าเล่น</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Canvas Confetti สำหรับเอฟเฟกต์สุ่มเกม -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <!-- Google Fonts & Font Awesome Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { font-family: 'Kanit', sans-serif; }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-    }
-    .card-zoom:hover img {
-      transform: scale(1.08);
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(13, 148, 136, 0.2), 0 8px 10px -6px rgba(13, 148, 136, 0.1);
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-teal-500 selection:text-white">
 
-  <!-- Hero Header -->
-  <header class="relative bg-gradient-to-br from-emerald-800 via-teal-700 to-cyan-900 text-white py-16 px-4 shadow-2xl overflow-hidden">
-    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-    <div class="max-w-6xl mx-auto text-center relative z-10">
-      <span class="bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider mb-4 inline-block">
-        ✨ Interactive Wildlife Encyclopedia
+  <!-- Header -->
+  <header class="relative bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 border-b border-teal-500/20 py-12 px-4 text-center overflow-hidden">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <span class="bg-teal-500/10 text-teal-400 border border-teal-500/30 text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block">
+        🎮 Ultimate Gaming Encyclopedia
       </span>
-      <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4 drop-shadow-md">
-        🌍 สารานุกรมสัตว์โลกมหัศจรรย์
+      <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white mb-3 drop-shadow-md">
+        GAME<span class="text-teal-400">VERSE</span>
       </h1>
-      <p class="text-emerald-100 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
-        สำรวจอาณาจักรสัตว์ป่า พร้อมระบบฟังเสียงร้อง บันทึกรายการโปรด และค้นพบข้อเท็จจริงสุดท้าทาย!
+      <p class="text-slate-400 text-base md:text-lg max-w-xl mx-auto font-light">
+        ค้นพบสุดยอดเกมฮิตติดชาร์ต พร้อมระบบกรองหมวดหมู่ สุ่มเกมเล่น และบันทึกเกมโปรดของคุณ!
       </p>
 
-      <!-- Stats Bar -->
-      <div class="mt-8 inline-flex items-center gap-6 bg-white/10 backdrop-blur-md px-6 py-2.5 rounded-2xl border border-white/20 text-sm">
-        <div><i class="fa-solid fa-paw text-emerald-400 mr-1.5"></i> สัตว์ทั้งหมด: <span id="total-count" class="font-bold text-white">6</span> ชนิด</div>
-        <div class="w-px h-4 bg-white/20"></div>
-        <div><i class="fa-solid fa-heart text-rose-400 mr-1.5"></i> รายการโปรด: <span id="fav-count" class="font-bold text-white">0</span> ชนิด</div>
-      </div>
+      <!-- Random Game Button -->
+      <button onclick="randomGame()" class="mt-6 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-2xl shadow-lg shadow-teal-500/25 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 mx-auto">
+        <i class="fa-solid fa-dice text-xl"></i> สุ่มเกมเล่นวันนี้!
+      </button>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-6xl mx-auto px-4 py-10 flex-grow w-full">
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
     
-    <!-- Control Panel (Filter & Search) -->
-    <div class="mb-10 bg-white p-5 md:p-6 rounded-3xl shadow-sm border border-slate-200 flex flex-col lg:flex-row gap-5 items-center justify-between">
+    <!-- Controls (Filter & Search) -->
+    <div class="mb-10 bg-slate-900/80 p-5 rounded-3xl border border-slate-800 backdrop-blur-md flex flex-col lg:flex-row gap-4 items-center justify-between shadow-xl">
       
-      <!-- Category Buttons -->
+      <!-- Filter Buttons -->
       <div class="flex flex-wrap gap-2 justify-center lg:justify-start" id="filter-buttons">
-        <button onclick="filterCategory('all')" class="filter-btn active bg-emerald-600 text-white font-medium px-4 py-2.5 rounded-2xl shadow-sm hover:bg-emerald-700 transition-all text-sm flex items-center gap-2" data-category="all">
+        <button onclick="filterCategory('all')" class="filter-btn active bg-teal-500 text-slate-950 font-bold px-4 py-2.5 rounded-2xl transition-all text-sm flex items-center gap-2" data-category="all">
           <i class="fa-solid fa-border-all"></i> ทั้งหมด
         </button>
-        <button onclick="filterCategory('mammal')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-4 py-2.5 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all text-sm flex items-center gap-2" data-category="mammal">
-          <i class="fa-solid fa-dog"></i> เลี้ยงลูกด้วยนม
+        <button onclick="filterCategory('action')" class="filter-btn bg-slate-800 text-slate-300 font-medium px-4 py-2.5 rounded-2xl hover:bg-slate-700 hover:text-teal-400 transition-all text-sm flex items-center gap-2" data-category="action">
+          <i class="fa-solid fa-gun"></i> Action / ต่อสู้
         </button>
-        <button onclick="filterCategory('bird')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-4 py-2.5 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all text-sm flex items-center gap-2" data-category="bird">
-          <i class="fa-solid fa-crow"></i> สัตว์ปีก
+        <button onclick="filterCategory('rpg')" class="filter-btn bg-slate-800 text-slate-300 font-medium px-4 py-2.5 rounded-2xl hover:bg-slate-700 hover:text-teal-400 transition-all text-sm flex items-center gap-2" data-category="rpg">
+          <i class="fa-solid fa-shield-halved"></i> RPG / ผจญภัย
         </button>
-        <button onclick="filterCategory('reptile')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-4 py-2.5 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all text-sm flex items-center gap-2" data-category="reptile">
-          <i class="fa-solid fa-dragon"></i> เลื้อยคลาน
+        <button onclick="filterCategory('casual')" class="filter-btn bg-slate-800 text-slate-300 font-medium px-4 py-2.5 rounded-2xl hover:bg-slate-700 hover:text-teal-400 transition-all text-sm flex items-center gap-2" data-category="casual">
+          <i class="fa-solid fa-gamepad"></i> Casual / ทำฟาร์ม
         </button>
-        <button onclick="filterCategory('aquatic')" class="filter-btn bg-slate-100 text-slate-600 font-medium px-4 py-2.5 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all text-sm flex items-center gap-2" data-category="aquatic">
-          <i class="fa-solid fa-fish"></i> สัตว์น้ำ/ครึ่งบกครึ่งน้ำ
+        <button onclick="filterCategory('sports')" class="filter-btn bg-slate-800 text-slate-300 font-medium px-4 py-2.5 rounded-2xl hover:bg-slate-700 hover:text-teal-400 transition-all text-sm flex items-center gap-2" data-category="sports">
+          <i class="fa-solid fa-basketball"></i> Sports / แข่งรถ
         </button>
-        <button onclick="filterCategory('favorite')" class="filter-btn bg-rose-50 text-rose-600 font-medium px-4 py-2.5 rounded-2xl hover:bg-rose-100 transition-all text-sm flex items-center gap-2 border border-rose-200" data-category="favorite">
-          <i class="fa-solid fa-heart text-rose-500"></i> ❤️ รายการโปรด
+        <button onclick="filterCategory('favorite')" class="filter-btn bg-rose-950/40 text-rose-400 border border-rose-500/30 font-medium px-4 py-2.5 rounded-2xl hover:bg-rose-900/50 transition-all text-sm flex items-center gap-2" data-category="favorite">
+          <i class="fa-solid fa-heart text-rose-500"></i> ❤️ เกมโปรด (<span id="fav-count">0</span>)
         </button>
       </div>
 
       <!-- Search Input -->
-      <div class="relative w-full lg:w-72">
-        <input type="text" id="search-input" onkeyup="applyFilters()" placeholder="ค้นหาชื่อสัตว์ หรือชื่อวิทยาศาสตร์..." 
-          class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all text-sm">
-        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+      <div class="relative w-full lg:w-64">
+        <input type="text" id="search-input" onkeyup="applyFilters()" placeholder="ค้นหาชื่อเกม..." 
+          class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-2xl focus:outline-none focus:border-teal-500 text-slate-200 transition-all text-sm">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
       </div>
 
     </div>
 
-    <!-- Gallery Grid -->
-    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Gallery Grid (6 Cards) -->
+    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <!-- Card 1: หมาป่าสีเทา -->
-      <div class="animal-card card-zoom bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col justify-between" data-category="mammal" data-name="หมาป่าสีเทา grey wolf canis lupus" data-fav="false">
+      <!-- Card 1: Valorant -->
+      <div class="game-card card-hover bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 transition-all duration-300 flex flex-col justify-between" data-category="action" data-name="valorant วาโลแรนต์" data-fav="false" data-title="Valorant">
         <div>
-          <div class="relative overflow-hidden h-56 cursor-pointer" onclick="openModal('หมาป่าสีเทา', 'Canis lupus', 'สัตว์เลี้ยงลูกด้วยนม', 'ป่าไม้และทุ่งหญ้าหนาวเหน็บ', 'เนื้อสัตว์ (ล่าเป็นฝูง)', 'หมาป่าสีเทาเป็นนักล่าสังคมที่มีโครงสร้างฝูงเข้มงวด การหอนของหมาป่าไม่ได้มีไว้ขู่เท่านั้น แต่ใช้เพื่อระบุตำแหน่ง รวมฝูง และประกาศอาณาเขต', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?auto=format&fit=crop&w=800&q=80" alt="หมาป่าสีเทา" class="w-full h-full object-cover transition-transform duration-500">
-            <span class="absolute top-4 right-4 bg-emerald-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">สัตว์เลี้ยงลูกด้วยนม</span>
+          <div class="relative overflow-hidden h-48 cursor-pointer" onclick="openModal('Valorant', 'Action / FPS', 'Riot Games', '9.0/10', 'เกมยิงปืนเชิงกลยุทธ์มุมมองบุคคลที่หนึ่ง 5v5 ที่ผสมผสานการยิงแม่นยำเข้ากับพลังความสามารถพิเศษเฉพาะตัวของเอเจนต์แต่ละคน', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="Valorant" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">Action</span>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-slate-800 mb-1">หมาป่าสีเทา</h3>
-            <p class="text-slate-400 text-xs italic mb-3">Canis lupus</p>
-            <p class="text-slate-600 text-sm leading-relaxed line-clamp-2">นักล่าผู้งดงามแห่งพงไพร สื่อสารด้วยการหอนอันทรงพลังและทำงานเป็นทีมอย่างเข้าขา</p>
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1">Valorant</h3>
+            <p class="text-xs text-teal-400 font-medium mb-2"><i class="fa-solid fa-star text-amber-400"></i> 9.0/10 • Riot Games</p>
+            <p class="text-slate-400 text-sm line-clamp-2">เกมยิงปืนเชิงกลยุทธ์ 5v5 สุดมันส์ ผสมผสานทักษะการยิงและการใช้สกิลเอเจนต์</p>
           </div>
         </div>
-        <div class="p-6 pt-0 flex items-center gap-3">
-          <button onclick="playSound('wolf')" class="flex-1 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-volume-high"></i> ฟังเสียงหอน
+        <div class="p-5 pt-0 flex gap-2">
+          <button onclick="openModal('Valorant', 'Action / FPS', 'Riot Games', '9.0/10', 'เกมยิงปืนเชิงกลยุทธ์มุมมองบุคคลที่หนึ่ง 5v5 ที่ผสมผสานการยิงแม่นยำเข้ากับพลังความสามารถพิเศษเฉพาะตัวของเอเจนต์แต่ละคน', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80')" class="flex-1 bg-slate-800 hover:bg-teal-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
+            ดูรายละเอียด
           </button>
-          <button onclick="openModal('หมาป่าสีเทา', 'Canis lupus', 'สัตว์เลี้ยงลูกด้วยนม', 'ป่าไม้และทุ่งหญ้าหนาวเหน็บ', 'เนื้อสัตว์ (ล่าเป็นฝูง)', 'หมาป่าสีเทาเป็นนักล่าสังคมที่มีโครงสร้างฝูงเข้มงวด การหอนของหมาป่าไม่ได้มีไว้ขู่เท่านั้น แต่ใช้เพื่อระบุตำแหน่ง รวมฝูง และประกาศอาณาเขต', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef9?auto=format&fit=crop&w=800&q=80')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-2xl transition-all text-xs" title="ดูข้อมูล">
-            <i class="fa-solid fa-circle-info text-base"></i>
-          </button>
-          <button onclick="toggleFavorite(this)" class="fav-btn bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 p-2.5 rounded-2xl transition-all text-xs">
-            <i class="fa-solid fa-heart text-base"></i>
+          <button onclick="toggleFavorite(this)" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 px-3 py-2.5 rounded-xl transition-all">
+            <i class="fa-solid fa-heart"></i>
           </button>
         </div>
       </div>
 
-      <!-- Card 2: นกเพนกวินจักรพรรดิ -->
-      <div class="animal-card card-zoom bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col justify-between" data-category="bird" data-name="นกเพนกวินจักรพรรดิ emperor penguin aptenodytes forsteri" data-fav="false">
+      <!-- Card 2: Elden Ring -->
+      <div class="game-card card-hover bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 transition-all duration-300 flex flex-col justify-between" data-category="rpg" data-name="elden ring เอลเดนริง" data-fav="false" data-title="Elden Ring">
         <div>
-          <div class="relative overflow-hidden h-56 cursor-pointer" onclick="openModal('นกเพนกวินจักรพรรดิ', 'Aptenodytes forsteri', 'สัตว์ปีก', 'ทวีปแอนตาร์กติกา (ขั้วโลกใต้)', 'ปลา ปลาหมึก และคริลล์', 'เพนกวินจักรพรรดิเป็นเพนกวินสายพันธุ์ใหญ่ที่สุด พ่อเพนกวินจะกกไข่ไว้บนเท้าโดยไม่กินอาหารนานกว่า 2 เดือนท่ามกลางพายุหิมะสุดขั้ว', 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=800&q=80" alt="นกเพนกวินจักรพรรดิ" class="w-full h-full object-cover transition-transform duration-500">
-            <span class="absolute top-4 right-4 bg-sky-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">สัตว์ปีก</span>
+          <div class="relative overflow-hidden h-48 cursor-pointer" onclick="openModal('Elden Ring', 'RPG / Action', 'FromSoftware', '9.6/10', 'สุดยอดเกม Action RPG Open-World ที่ให้ผู้เล่นสำรวจดินแดนอันกว้างใหญ่ ต่อสู้กับบอสสุดท้าทาย และค้นหาความลับแห่งวงแหวนเอลเดน', 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80" alt="Elden Ring" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">RPG</span>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-slate-800 mb-1">นกเพนกวินจักรพรรดิ</h3>
-            <p class="text-slate-400 text-xs italic mb-3">Aptenodytes forsteri</p>
-            <p class="text-slate-600 text-sm leading-relaxed line-clamp-2">เจ้านกบินไม่ได้แห่งขั้วโลกใต้ ทนทานความหนาวสุดขั้วและรักเดียวใจเดียว</p>
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1">Elden Ring</h3>
+            <p class="text-xs text-teal-400 font-medium mb-2"><i class="fa-solid fa-star text-amber-400"></i> 9.6/10 • FromSoftware</p>
+            <p class="text-slate-400 text-sm line-clamp-2">ผจญภัยในโลกกว้างสุดท้าทาย ปะทะบอสสุดโหดระดับแฟนตาซีเข้มข้น</p>
           </div>
         </div>
-        <div class="p-6 pt-0 flex items-center gap-3">
-          <button onclick="playSound('bird')" class="flex-1 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-volume-high"></i> ฟังเสียงร้อง
+        <div class="p-5 pt-0 flex gap-2">
+          <button onclick="openModal('Elden Ring', 'RPG / Action', 'FromSoftware', '9.6/10', 'สุดยอดเกม Action RPG Open-World ที่ให้ผู้เล่นสำรวจดินแดนอันกว้างใหญ่ ต่อสู้กับบอสสุดท้าทาย และค้นหาความลับแห่งวงแหวนเอลเดน', 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80')" class="flex-1 bg-slate-800 hover:bg-teal-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
+            ดูรายละเอียด
           </button>
-          <button onclick="openModal('นกเพนกวินจักรพรรดิ', 'Aptenodytes forsteri', 'สัตว์ปีก', 'ทวีปแอนตาร์กติกา (ขั้วโลกใต้)', 'ปลา ปลาหมึก และคริลล์', 'เพนกวินจักรพรรดิเป็นเพนกวินสายพันธุ์ใหญ่ที่สุด พ่อเพนกวินจะกกไข่ไว้บนเท้าโดยไม่กินอาหารนานกว่า 2 เดือนท่ามกลางพายุหิมะสุดขั้ว', 'https://images.unsplash.com/photo-1598439210625-5067c578f3f6?auto=format&fit=crop&w=800&q=80')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-2xl transition-all text-xs" title="ดูข้อมูล">
-            <i class="fa-solid fa-circle-info text-base"></i>
-          </button>
-          <button onclick="toggleFavorite(this)" class="fav-btn bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 p-2.5 rounded-2xl transition-all text-xs">
-            <i class="fa-solid fa-heart text-base"></i>
+          <button onclick="toggleFavorite(this)" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 px-3 py-2.5 rounded-xl transition-all">
+            <i class="fa-solid fa-heart"></i>
           </button>
         </div>
       </div>
 
-      <!-- Card 3: กิ้งก่าคาเมเลียน -->
-      <div class="animal-card card-zoom bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col justify-between" data-category="reptile" data-name="กิ้งก่าคาเมเลียน chameleon chamaeleonidae" data-fav="false">
+      <!-- Card 3: Stardew Valley -->
+      <div class="game-card card-hover bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 transition-all duration-300 flex flex-col justify-between" data-category="casual" data-name="stardew valley สตาร์ดิว" data-fav="false" data-title="Stardew Valley">
         <div>
-          <div class="relative overflow-hidden h-56 cursor-pointer" onclick="openModal('กิ้งก่าคาเมเลียน', 'Chamaeleonidae', 'สัตว์เลื้อยคลาน', 'ป่าดงดิบและทะเลทราย', 'แมลงต่างๆ', 'นอกจากเปลี่ยนสีผิวเพื่อพรางตัวแล้ว คาเมเลียนยังมีดวงตาที่หมุนได้ 360 องศาอย่างเป็นอิสระต่อกัน และลิ้นที่ยาวกว่าลำตัวถึง 2 เท่า', 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80" alt="กิ้งก่าคาเมเลียน" class="w-full h-full object-cover transition-transform duration-500">
-            <span class="absolute top-4 right-4 bg-amber-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">สัตว์เลื้อยคลาน</span>
+          <div class="relative overflow-hidden h-48 cursor-pointer" onclick="openModal('Stardew Valley', 'Casual / Simulation', 'ConcernedApe', '9.8/10', 'เกมจำลองชีวิตทำฟาร์มแสนอบอุ่น ปลูกผัก เลี้ยงสัตว์ ขุดแร่ ตกปลา และสร้างมิตรภาพกับชาวเมืองใน Stardew Valley', 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80" alt="Stardew Valley" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">Casual</span>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-slate-800 mb-1">กิ้งก่าคาเมเลียน</h3>
-            <p class="text-slate-400 text-xs italic mb-3">Chamaeleonidae</p>
-            <p class="text-slate-600 text-sm leading-relaxed line-clamp-2">จอมพรางตัวแห่งพงไพร ปรับเปลี่ยนสีตามอารมณ์และสภาพแวดล้อมได้แนบเนียน</p>
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1">Stardew Valley</h3>
+            <p class="text-xs text-teal-400 font-medium mb-2"><i class="fa-solid fa-star text-amber-400"></i> 9.8/10 • ConcernedApe</p>
+            <p class="text-slate-400 text-sm line-clamp-2">เกมทำฟาร์มพิกเซลสุดสโลว์ไลฟ์ ปลูกผัก เลี้ยงสัตว์ และผูกมิตรกับผู้คน</p>
           </div>
         </div>
-        <div class="p-6 pt-0 flex items-center gap-3">
-          <button onclick="playSound('hiss')" class="flex-1 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-volume-high"></i> ฟังเสียงขู่
+        <div class="p-5 pt-0 flex gap-2">
+          <button onclick="openModal('Stardew Valley', 'Casual / Simulation', 'ConcernedApe', '9.8/10', 'เกมจำลองชีวิตทำฟาร์มแสนอบอุ่น ปลูกผัก เลี้ยงสัตว์ ขุดแร่ ตกปลา และสร้างมิตรภาพกับชาวเมืองใน Stardew Valley', 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80')" class="flex-1 bg-slate-800 hover:bg-teal-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
+            ดูรายละเอียด
           </button>
-          <button onclick="openModal('กิ้งก่าคาเมเลียน', 'Chamaeleonidae', 'สัตว์เลื้อยคลาน', 'ป่าดงดิบและทะเลทราย', 'แมลงต่างๆ', 'นอกจากเปลี่ยนสีผิวเพื่อพรางตัวแล้ว คาเมเลียนยังมีดวงตาที่หมุนได้ 360 องศาอย่างเป็นอิสระต่อกัน และลิ้นที่ยาวกว่าลำตัวถึง 2 เท่า', 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-2xl transition-all text-xs" title="ดูข้อมูล">
-            <i class="fa-solid fa-circle-info text-base"></i>
-          </button>
-          <button onclick="toggleFavorite(this)" class="fav-btn bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 p-2.5 rounded-2xl transition-all text-xs">
-            <i class="fa-solid fa-heart text-base"></i>
+          <button onclick="toggleFavorite(this)" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 px-3 py-2.5 rounded-xl transition-all">
+            <i class="fa-solid fa-heart"></i>
           </button>
         </div>
       </div>
 
-      <!-- Card 4: โลมาปากขวด -->
-      <div class="animal-card card-zoom bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col justify-between" data-category="aquatic" data-name="โลมาปากขวด dolphin tursiops truncatus" data-fav="false">
+      <!-- Card 4: EA Sports FC -->
+      <div class="game-card card-hover bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 transition-all duration-300 flex flex-col justify-between" data-category="sports" data-name="ea sports fc fifa ฟุตบอล" data-fav="false" data-title="EA Sports FC">
         <div>
-          <div class="relative overflow-hidden h-56 cursor-pointer" onclick="openModal('โลมาปากขวด', 'Tursiops truncatus', 'สัตว์น้ำ/ครึ่งบกครึ่งน้ำ', 'มหาสมุทรเขตอบอุ่นทั่วโลก', 'ปลา และหมึก', 'โลมาเป็นสัตว์น้ำที่มีสติปัญญาเยี่ยมยอด พวกมันใช้ระบบ Echolocation ในการหาทางและล่าเหยื่อ และสมองของโลมาหยุดพักเพียงทีละซีกในเวลาหลับ', 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=800&q=80" alt="โลมาปากขวด" class="w-full h-full object-cover transition-transform duration-500">
-            <span class="absolute top-4 right-4 bg-teal-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">สัตว์น้ำ</span>
+          <div class="relative overflow-hidden h-48 cursor-pointer" onclick="openModal('EA Sports FC', 'Sports / Simulation', 'EA Sports', '8.2/10', 'สุดยอดเกมฟุตบอลสมจริงระดับโลก รวบรวมนักเตะและสโมสรชั้นนำ พร้อมโหมดการเล่นหลากหลายทั้ง Career และ Ultimate Team', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="EA Sports FC" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">Sports</span>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-slate-800 mb-1">โลมาปากขวด</h3>
-            <p class="text-slate-400 text-xs italic mb-3">Tursiops truncatus</p>
-            <p class="text-slate-600 text-sm leading-relaxed line-clamp-2">เพื่อนแสนรู้แห่งมหาสมุทร ฉลาด ขี้เล่น และสื่อสารด้วยคลื่นเสียงความถี่สูง</p>
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1">EA Sports FC</h3>
+            <p class="text-xs text-teal-400 font-medium mb-2"><i class="fa-solid fa-star text-amber-400"></i> 8.2/10 • EA Sports</p>
+            <p class="text-slate-400 text-sm line-clamp-2">สัมผัสความสมจริงของสนามฟุตบอลระดับโลก สร้างทีมในฝันแล้วลงแข่ง</p>
           </div>
         </div>
-        <div class="p-6 pt-0 flex items-center gap-3">
-          <button onclick="playSound('dolphin')" class="flex-1 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-volume-high"></i> ฟังเสียงโลมา
+        <div class="p-5 pt-0 flex gap-2">
+          <button onclick="openModal('EA Sports FC', 'Sports / Simulation', 'EA Sports', '8.2/10', 'สุดยอดเกมฟุตบอลสมจริงระดับโลก รวบรวมนักเตะและสโมสรชั้นนำ พร้อมโหมดการเล่นหลากหลายทั้ง Career และ Ultimate Team', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80')" class="flex-1 bg-slate-800 hover:bg-teal-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
+            ดูรายละเอียด
           </button>
-          <button onclick="openModal('โลมาปากขวด', 'Tursiops truncatus', 'สัตว์น้ำ/ครึ่งบกครึ่งน้ำ', 'มหาสมุทรเขตอบอุ่นทั่วโลก', 'ปลา และหมึก', 'โลมาเป็นสัตว์น้ำที่มีสติปัญญาเยี่ยมยอด พวกมันใช้ระบบ Echolocation ในการหาทางและล่าเหยื่อ และสมองของโลมาหยุดพักเพียงทีละซีกในเวลาหลับ', 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?auto=format&fit=crop&w=800&q=80')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-2xl transition-all text-xs" title="ดูข้อมูล">
-            <i class="fa-solid fa-circle-info text-base"></i>
-          </button>
-          <button onclick="toggleFavorite(this)" class="fav-btn bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 p-2.5 rounded-2xl transition-all text-xs">
-            <i class="fa-solid fa-heart text-base"></i>
+          <button onclick="toggleFavorite(this)" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 px-3 py-2.5 rounded-xl transition-all">
+            <i class="fa-solid fa-heart"></i>
           </button>
         </div>
       </div>
 
-      <!-- Card 5: แพนด้าแดง -->
-      <div class="animal-card card-zoom bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col justify-between" data-category="mammal" data-name="แพนด้าแดง red panda ailurus fulgens" data-fav="false">
+      <!-- Card 5: Minecraft -->
+      <div class="game-card card-hover bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 transition-all duration-300 flex flex-col justify-between" data-category="casual" data-name="minecraft มายคราฟ" data-fav="false" data-title="Minecraft">
         <div>
-          <div class="relative overflow-hidden h-56 cursor-pointer" onclick="openModal('แพนด้าแดง', 'Ailurus fulgens', 'สัตว์เลี้ยงลูกด้วยนม', 'ป่าระดักสูงเทือกเขาหิมาลัย', 'ใบไผ่ ผลไม้ และแมลง', 'แพนด้าแดงไม่ได้เป็นญาติใกล้ชิดกับแพนด้ายักษ์อย่างที่คิด มีขนาดตัวพอๆ กับแมวบ้าน และใช้หางเป็นพวงคลุมร่างกายเพื่อสร้างความอบอุ่น', 'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80" alt="แพนด้าแดง" class="w-full h-full object-cover transition-transform duration-500">
-            <span class="absolute top-4 right-4 bg-emerald-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">สัตว์เลี้ยงลูกด้วยนม</span>
+          <div class="relative overflow-hidden h-48 cursor-pointer" onclick="openModal('Minecraft', 'Casual / Sandbox', 'Mojang Studios', '9.5/10', 'เกมสร้างโลกบล็อกทรงลูกบาศก์อันไร้ขีดจำกัด เปิดโอกาสให้ผู้เล่นคราฟต์ของ สร้างบ้าน สำรวจถ้ำ และเอาชีวิตรอด', 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=800&q=80" alt="Minecraft" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">Casual</span>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-slate-800 mb-1">แพนด้าแดง</h3>
-            <p class="text-slate-400 text-xs italic mb-3">Ailurus fulgens</p>
-            <p class="text-slate-600 text-sm leading-relaxed line-clamp-2">เจ้าตัวขนปุยสุดน่ารักแห่งหิมาลัย ชอบป่ายปีนและใช้ชีวิตบนต้นไม้เป็นหลัก</p>
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1">Minecraft</h3>
+            <p class="text-xs text-teal-400 font-medium mb-2"><i class="fa-solid fa-star text-amber-400"></i> 9.5/10 • Mojang Studios</p>
+            <p class="text-slate-400 text-sm line-clamp-2">ปลดปล่อยจินตนาการไร้ขีดจำกัด สร้างสิ่งก่อสร้างและเอาชีวิตรอดในโลกบล็อก</p>
           </div>
         </div>
-        <div class="p-6 pt-0 flex items-center gap-3">
-          <button onclick="playSound('squeak')" class="flex-1 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-volume-high"></i> ฟังเสียงร้อง
+        <div class="p-5 pt-0 flex gap-2">
+          <button onclick="openModal('Minecraft', 'Casual / Sandbox', 'Mojang Studios', '9.5/10', 'เกมสร้างโลกบล็อกทรงลูกบาศก์อันไร้ขีดจำกัด เปิดโอกาสให้ผู้เล่นคราฟต์ของ สร้างบ้าน สำรวจถ้ำ และเอาชีวิตรอด', 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=800&q=80')" class="flex-1 bg-slate-800 hover:bg-teal-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
+            ดูรายละเอียด
           </button>
-          <button onclick="openModal('แพนด้าแดง', 'Ailurus fulgens', 'สัตว์เลี้ยงลูกด้วยนม', 'ป่าระดักสูงเทือกเขาหิมาลัย', 'ใบไผ่ ผลไม้ และแมลง', 'แพนด้าแดงไม่ได้เป็นญาติใกล้ชิดกับแพนด้ายักษ์อย่างที่คิด มีขนาดตัวพอๆ กับแมวบ้าน และใช้หางเป็นพวงคลุมร่างกายเพื่อสร้างความอบอุ่น', 'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-2xl transition-all text-xs" title="ดูข้อมูล">
-            <i class="fa-solid fa-circle-info text-base"></i>
-          </button>
-          <button onclick="toggleFavorite(this)" class="fav-btn bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 p-2.5 rounded-2xl transition-all text-xs">
-            <i class="fa-solid fa-heart text-base"></i>
+          <button onclick="toggleFavorite(this)" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 px-3 py-2.5 rounded-xl transition-all">
+            <i class="fa-solid fa-heart"></i>
           </button>
         </div>
       </div>
 
-      <!-- Card 6: นกเค้าแมวหิมะ -->
-      <div class="animal-card card-zoom bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col justify-between" data-category="bird" data-name="นกเค้าแมวหิมะ snowy owl bubo scandiacus" data-fav="false">
+      <!-- Card 6: Cyberpunk 2077 -->
+      <div class="game-card card-hover bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 transition-all duration-300 flex flex-col justify-between" data-category="rpg" data-name="cyberpunk 2077 ไซเบอร์พังก์" data-fav="false" data-title="Cyberpunk 2077">
         <div>
-          <div class="relative overflow-hidden h-56 cursor-pointer" onclick="openModal('นกเค้าแมวหิมะ', 'Bubo scandiacus', 'สัตว์ปีก', 'ทุนดราขั้วโลกเหนือ', 'เลมมิง และสัตว์ฟันแทะ', 'นกเค้าแมวหิมะแตกต่างจากนกเค้าแมวชนิดอื่นตรงที่มันออกล่าเหยื่อในเวลากลางวัน มีขนหนานุ่มคลุมจรดปลายเล็บเพื่อสู้กับความเย็นขั้วโลก', 'https://images.unsplash.com/photo-1551085254-e96b210db58a?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1551085254-e96b210db58a?auto=format&fit=crop&w=800&q=80" alt="นกเค้าแมวหิมะ" class="w-full h-full object-cover transition-transform duration-500">
-            <span class="absolute top-4 right-4 bg-sky-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">สัตว์ปีก</span>
+          <div class="relative overflow-hidden h-48 cursor-pointer" onclick="openModal('Cyberpunk 2077', 'RPG / Sci-Fi', 'CD Projekt Red', '8.8/10', 'สวมบทบาทเป็น V ทหารรับจ้างไซเบอร์เนติกส์ใน Night City เมืองมหานครแห่งอนาคตที่เต็มไปด้วยอันตราย แสงนีออน และเทคโนโลยี', 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=800&q=80" alt="Cyberpunk 2077" class="w-full h-full object-cover">
+            <span class="absolute top-3 right-3 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">RPG</span>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-slate-800 mb-1">นกเค้าแมวหิมะ</h3>
-            <p class="text-slate-400 text-xs italic mb-3">Bubo scandiacus</p>
-            <p class="text-slate-600 text-sm leading-relaxed line-clamp-2">นักล่าแห่งหิมะขั้วโลก ขนขาวสง่างาม บินเงียบกริบและออกล่าเวลากลางวัน</p>
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-white mb-1">Cyberpunk 2077</h3>
+            <p class="text-xs text-teal-400 font-medium mb-2"><i class="fa-solid fa-star text-amber-400"></i> 8.8/10 • CD Projekt Red</p>
+            <p class="text-slate-400 text-sm line-clamp-2">ท่องโลกอนาคตอันตระการตาใน Night City พร้อมการดัดแปลงร่างกายสุดล้ำ</p>
           </div>
         </div>
-        <div class="p-6 pt-0 flex items-center gap-3">
-          <button onclick="playSound('owl')" class="flex-1 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 text-xs font-bold py-2.5 px-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-volume-high"></i> ฟังเสียงร้อง
+        <div class="p-5 pt-0 flex gap-2">
+          <button onclick="openModal('Cyberpunk 2077', 'RPG / Sci-Fi', 'CD Projekt Red', '8.8/10', 'สวมบทบาทเป็น V ทหารรับจ้างไซเบอร์เนติกส์ใน Night City เมืองมหานครแห่งอนาคตที่เต็มไปด้วยอันตราย แสงนีออน และเทคโนโลยี', 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=800&q=80')" class="flex-1 bg-slate-800 hover:bg-teal-500 hover:text-slate-950 text-slate-200 text-xs font-bold py-2.5 rounded-xl transition-all">
+            ดูรายละเอียด
           </button>
-          <button onclick="openModal('นกเค้าแมวหิมะ', 'Bubo scandiacus', 'สัตว์ปีก', 'ทุนดราขั้วโลกเหนือ', 'เลมมิง และสัตว์ฟันแทะ', 'นกเค้าแมวหิมะแตกต่างจากนกเค้าแมวชนิดอื่นตรงที่มันออกล่าเหยื่อในเวลากลางวัน มีขนหนานุ่มคลุมจรดปลายเล็บเพื่อสู้กับความเย็นขั้วโลก', 'https://images.unsplash.com/photo-1551085254-e96b210db58a?auto=format&fit=crop&w=800&q=80')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-2xl transition-all text-xs" title="ดูข้อมูล">
-            <i class="fa-solid fa-circle-info text-base"></i>
-          </button>
-          <button onclick="toggleFavorite(this)" class="fav-btn bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-500 p-2.5 rounded-2xl transition-all text-xs">
-            <i class="fa-solid fa-heart text-base"></i>
+          <button onclick="toggleFavorite(this)" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 px-3 py-2.5 rounded-xl transition-all">
+            <i class="fa-solid fa-heart"></i>
           </button>
         </div>
       </div>
@@ -244,63 +222,44 @@
     </div>
 
     <!-- Empty State -->
-    <div id="no-results" class="hidden text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200 mt-8">
-      <i class="fa-solid fa-paw text-6xl text-slate-200 mb-4 animate-bounce"></i>
-      <h3 class="text-2xl font-bold text-slate-700 mb-1">ไม่พบข้อมูลสัตว์ที่ค้นหา</h3>
-      <p class="text-slate-400 text-sm">ลองค้นหาด้วยคำอื่น หรือกดปุ่ม "ทั้งหมด" ด้านบนดูนะครับ</p>
+    <div id="no-results" class="hidden text-center py-16 bg-slate-900/50 rounded-3xl border border-dashed border-slate-800 mt-6">
+      <i class="fa-solid fa-gamepad text-5xl text-slate-600 mb-3"></i>
+      <h3 class="text-xl font-bold text-slate-300">ไม่พบเกมที่ค้นหา</h3>
+      <p class="text-slate-500 text-sm">ลองค้นหาด้วยคำอื่น หรือกดเลือกหมวดหมู่อื่นดูนะครับ</p>
     </div>
 
   </main>
 
-  <!-- Modal Pop-up (Interactive Detail) -->
-  <div id="modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
-    <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-      <div class="relative h-64">
+  <!-- Modal Pop-up -->
+  <div id="modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="relative h-56">
         <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
-        <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/60 hover:bg-black/90 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all">
-          <i class="fa-solid fa-xmark text-xl"></i>
+        <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-950/70 hover:bg-slate-950 text-white w-9 h-9 rounded-full flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark"></i>
         </button>
-        <span id="modal-category" class="absolute bottom-4 left-4 bg-emerald-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg"></span>
+        <span id="modal-category" class="absolute bottom-4 left-4 bg-teal-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-md"></span>
       </div>
-      <div class="p-6 md:p-8">
-        <h2 id="modal-title" class="text-3xl font-black text-slate-800 mb-1"></h2>
-        <p id="modal-latin" class="text-slate-400 text-xs italic mb-5"></p>
-        
-        <div class="grid grid-cols-2 gap-3 mb-5 text-sm">
-          <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-            <p class="text-xs text-slate-400 font-semibold mb-1"><i class="fa-solid fa-location-dot text-emerald-600 mr-1"></i> ถิ่นอาศัย</p>
-            <p id="modal-habitat" class="font-medium text-slate-700"></p>
-          </div>
-          <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-            <p class="text-xs text-slate-400 font-semibold mb-1"><i class="fa-solid fa-utensils text-emerald-600 mr-1"></i> อาหารหลัก</p>
-            <p id="modal-diet" class="font-medium text-slate-700"></p>
-          </div>
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-2">
+          <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
+          <span id="modal-rating" class="text-amber-400 text-sm font-bold"><i class="fa-solid fa-star"></i> <span></span></span>
         </div>
-
-        <div class="border-t border-slate-100 pt-4">
-          <h4 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-1.5">
-            <i class="fa-solid fa-lightbulb text-amber-500"></i> ข้อเท็จจริงน่ารู้
-          </h4>
-          <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed"></p>
+        <p id="modal-developer" class="text-xs text-teal-400 mb-4"></p>
+        <div class="border-t border-slate-800 pt-3">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">รายละเอียดเกม:</h4>
+          <p id="modal-desc" class="text-slate-300 text-sm leading-relaxed"></p>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 py-8 text-center text-slate-500 text-sm mt-12">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p>© 2026 Animal Encyclopedia Project • สร้างขึ้นเพื่อการศึกษา</p>
-      <div class="flex gap-4 text-slate-400 text-lg">
-        <i class="fa-brands fa-github hover:text-emerald-600 cursor-pointer"></i>
-        <i class="fa-brands fa-html5 hover:text-emerald-600 cursor-pointer"></i>
-        <i class="fa-brands fa-css3-alt hover:text-emerald-600 cursor-pointer"></i>
-        <i class="fa-brands fa-js hover:text-emerald-600 cursor-pointer"></i>
-      </div>
-    </div>
+  <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-slate-500 text-sm">
+    <p>© 2026 GameVerse Showcase • HTML, CSS & JavaScript Project</p>
   </footer>
 
-  <!-- JavaScript Logic -->
+  <!-- Interactive JavaScript Logic -->
   <script>
     let currentCategory = 'all';
 
@@ -310,24 +269,22 @@
       const buttons = document.querySelectorAll('#filter-buttons button');
       buttons.forEach(btn => {
         if (btn.getAttribute('data-category') === category) {
-          btn.classList.add('bg-emerald-600', 'text-white');
-          btn.classList.remove('bg-slate-100', 'text-slate-600', 'bg-rose-50', 'text-rose-600');
+          btn.className = "filter-btn active bg-teal-500 text-slate-950 font-bold px-4 py-2.5 rounded-2xl transition-all text-sm flex items-center gap-2";
         } else {
-          btn.classList.remove('bg-emerald-600', 'text-white');
           if (btn.getAttribute('data-category') === 'favorite') {
-            btn.classList.add('bg-rose-50', 'text-rose-600');
+            btn.className = "filter-btn bg-rose-950/40 text-rose-400 border border-rose-500/30 font-medium px-4 py-2.5 rounded-2xl hover:bg-rose-900/50 transition-all text-sm flex items-center gap-2";
           } else {
-            btn.classList.add('bg-slate-100', 'text-slate-600');
+            btn.className = "filter-btn bg-slate-800 text-slate-300 font-medium px-4 py-2.5 rounded-2xl hover:bg-slate-700 hover:text-teal-400 transition-all text-sm flex items-center gap-2";
           }
         }
       });
       applyFilters();
     }
 
-    // 2. Master Filter Logic
+    // 2. Main Filter Logic
     function applyFilters() {
       const searchValue = document.getElementById('search-input').value.toLowerCase();
-      const cards = document.querySelectorAll('.animal-card');
+      const cards = document.querySelectorAll('.game-card');
       let visibleCount = 0;
 
       cards.forEach(card => {
@@ -345,7 +302,6 @@
         }
       });
 
-      // Update No Results State
       const noResults = document.getElementById('no-results');
       if (visibleCount === 0) {
         noResults.classList.remove('hidden');
@@ -354,13 +310,31 @@
       }
     }
 
-    // 3. Modal Pop-up Control
-    function openModal(title, latin, category, habitat, diet, desc, img) {
+    // 3. Random Game Interactive Feature
+    function randomGame() {
+      const cards = Array.from(document.querySelectorAll('.game-card'));
+      const randomCard = cards[Math.floor(Math.random() * cards.length)];
+      const title = randomCard.getAttribute('data-title');
+      
+      // Fire Confetti Animation
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Highlight randomly selected card
+      cards.forEach(c => c.classList.remove('ring-4', 'ring-teal-400'));
+      randomCard.classList.add('ring-4', 'ring-teal-400');
+      randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 4. Modal Functions
+    function openModal(title, category, developer, rating, desc, img) {
       document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-latin').innerText = latin;
       document.getElementById('modal-category').innerText = category;
-      document.getElementById('modal-habitat').innerText = habitat;
-      document.getElementById('modal-diet').innerText = diet;
+      document.getElementById('modal-developer').innerText = 'ผู้พัฒนา: ' + developer;
+      document.getElementById('modal-rating').querySelector('span').innerText = rating;
       document.getElementById('modal-desc').innerText = desc;
       document.getElementById('modal-img').src = img;
       
@@ -375,83 +349,26 @@
       if (e.target === this) closeModal();
     });
 
-    // 4. Sound Synthesizer (Generates Animal Frequencies dynamically)
-    function playSound(type) {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      const now = ctx.currentTime;
-
-      if (type === 'wolf') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(600, now + 0.8);
-        osc.frequency.exponentialRampToValueAtTime(250, now + 1.8);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 1.8);
-        osc.start(now);
-        osc.stop(now + 1.8);
-      } else if (type === 'bird' || type === 'squeak') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(1200, now);
-        osc.frequency.exponentialRampToValueAtTime(2200, now + 0.15);
-        osc.frequency.exponentialRampToValueAtTime(1500, now + 0.3);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
-      } else if (type === 'dolphin') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(2500, now);
-        osc.frequency.exponentialRampToValueAtTime(3800, now + 0.1);
-        osc.frequency.exponentialRampToValueAtTime(1800, now + 0.25);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } else if (type === 'owl') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(380, now);
-        osc.frequency.exponentialRampToValueAtTime(220, now + 0.6);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      } else if (type === 'hiss') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(140, now);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-        osc.start(now);
-        osc.stop(now + 0.4);
-      }
-    }
-
-    // 5. Favorite Heart Toggle & Counter Update
+    // 5. Favorite System
     function toggleFavorite(btn) {
-      const card = btn.closest('.animal-card');
+      const card = btn.closest('.game-card');
       const isFav = card.getAttribute('data-fav') === 'true';
 
       if (isFav) {
         card.setAttribute('data-fav', 'false');
-        btn.classList.remove('text-rose-500', 'bg-rose-50');
-        btn.classList.add('text-slate-400', 'bg-slate-100');
+        btn.classList.remove('text-rose-400', 'bg-rose-950/60');
+        btn.classList.add('text-slate-400', 'bg-slate-800');
       } else {
         card.setAttribute('data-fav', 'true');
-        btn.classList.add('text-rose-500', 'bg-rose-50');
-        btn.classList.remove('text-slate-400', 'bg-slate-100');
+        btn.classList.add('text-rose-400', 'bg-rose-950/60');
+        btn.classList.remove('text-slate-400', 'bg-slate-800');
       }
 
-      // Update Live Favorite Counter
-      const favCards = document.querySelectorAll('.animal-card[data-fav="true"]');
+      // Update Favorite Count
+      const favCards = document.querySelectorAll('.game-card[data-fav="true"]');
       document.getElementById('fav-count').innerText = favCards.length;
 
-      // Re-apply filter if currently viewing favorites
-      if (currentCategory === 'favorite') {
-        applyFilters();
-      }
+      if (currentCategory === 'favorite') applyFilters();
     }
   </script>
 
