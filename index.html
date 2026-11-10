@@ -92,7 +92,6 @@
             cursor: pointer;
         }
 
-        /* Hover Effect สำหรับการ์ดข้อมูล */
         .card:hover {
             transform: translateY(-8px);
             border-color: #a855f7;
@@ -108,7 +107,6 @@
             font-size: 3.5rem;
         }
 
-        /* สลับสีพื้นหลังการ์ดแยกตามหมวดหมู่ */
         .card.casual .card-img-placeholder { background: linear-gradient(45deg, #10b981, #3b82f6); }
         .card.gacha .card-img-placeholder { background: linear-gradient(45deg, #ec4899, #8b5cf6); }
         .card.rpg .card-img-placeholder { background: linear-gradient(45deg, #ef4444, #f59e0b); }
@@ -188,7 +186,6 @@
         }
         .close-btn:hover { color: #ef4444; }
 
-        /* สไตล์ปุ่มและองค์ประกอบภายในตู้เกมจำลอง */
         .game-screen {
             background-color: #0f172a;
             border-radius: 12px;
@@ -213,10 +210,10 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             width: 80%;
+            margin-top: 10px;
         }
         .game-action-btn:hover { background-color: #059669; }
 
-        /* Responsive Design */
         @media (max-width: 480px) {
             header h1 { font-size: 2.2rem; }
             .gallery { grid-template-columns: 1fr; }
@@ -225,13 +222,13 @@
 </head>
 <body>
 
-    <!-- ส่วนหัวเว็บ (Header) -->
+    <!-- ส่วนหัวเว็บ -->
     <header>
         <h1>Warp Game Arcade 🎮</h1>
         <p>คลังมินิเกมสุดมันส์ กรองหมวดหมู่และคลิกการ์ดเพื่อเปิดเล่นเกมได้เลย!</p>
     </header>
 
-    <!-- ปุ่มกรองหมวดหมู่ (Filter Buttons) -->
+    <!-- ปุ่มกรองหมวดหมู่ -->
     <div class="filter-container">
         <button class="btn active" onclick="filterSelection('all')">ทั้งหมด</button>
         <button class="btn" onclick="filterSelection('casual')">เกมเล่นชิลๆ (Casual)</button>
@@ -239,7 +236,7 @@
         <button class="btn" onclick="filterSelection('rpg')">เกมต่อสู้ (RPG)</button>
     </div>
 
-    <!-- คลังการ์ดเกม (Gallery - 8 ชิ้นจุใจ) -->
+    <!-- คลังการ์ดเกม (Gallery - 6 ชิ้นตามโจทก์กำหนด) -->
     <main class="gallery">
         
         <!-- เกมที่ 1 (Casual) -->
@@ -248,23 +245,12 @@
             <div class="card-content">
                 <span class="card-tag">Casual</span>
                 <h3 class="card-title">Cookie Clicker Sim</h3>
-                <p class="card-text">เกมคลิกนิ้วรัวๆ กดอบคุกกี้เพื่อทำลายสถิติโลกและสะสมแต้มให้ได้มากที่สุด!</p>
+                <p class="card-text">เกมคลิกนิ้วรัวๆ กดอบคุกกี้เพื่อสะสมแต้มให้ได้มากที่สุด!</p>
                 <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
             </div>
         </div>
 
         <!-- เกมที่ 2 (Casual) -->
-        <div class="card casual" onclick="openGame('typer')">
-            <div class="card-img-placeholder">⌨️</div>
-            <div class="card-content">
-                <span class="card-tag">Casual</span>
-                <h3 class="card-title">Speed Typer</h3>
-                <p class="card-text">ทดสอบความเร็วในการพิมพ์ข้อความตามที่กำหนด แข่งกับเวลาอันแสนสั้น</p>
-                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
-            </div>
-        </div>
-
-        <!-- เกมที่ 3 (Casual) -->
         <div class="card casual" onclick="openGame('timer')">
             <div class="card-img-placeholder">⏱️</div>
             <div class="card-content">
@@ -275,7 +261,7 @@
             </div>
         </div>
 
-        <!-- เกมที่ 4 (Gacha) -->
+        <!-- เกมที่ 3 (Gacha) -->
         <div class="card gacha" onclick="openGame('gachaHero')">
             <div class="card-img-placeholder">💎</div>
             <div class="card-content">
@@ -286,19 +272,32 @@
             </div>
         </div>
 
-        <!-- เกมที่ 5 (Gacha) -->
+        <!-- เกมที่ 4 (Gacha) -->
         <div class="card gacha" onclick="openGame('luckyBox')">
             <div class="card-img-placeholder">🎁</div>
             <div class="card-content">
                 <span class="card-tag">Gacha</span>
                 <h3 class="card-title">Lucky Box</h3>
-                <p class="card-text">กล่องสุ่มปริศนา เลือกกล่องนำโชคเพื่อลุ้นเงินรางวัลแจ็กพอตมหาศาล</p>
+                <p class="card-text">กล่องสุ่มปริศนา เลือกกล่องนำโชคเพื่อลุ้นรับรางวัลใหญ่</p>
                 <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
             </div>
         </div>
 
-        <!-- เกมที่ 6 (Gacha) -->
-        <div class="card gacha" onclick="openGame('wheel')">
-            <div class="card-img-placeholder">🎡</div>
+        <!-- เกมที่ 5 (RPG) -->
+        <div class="card rpg" onclick="openGame('slime')">
+            <div class="card-img-placeholder">👾</div>
             <div class="card-content">
-                <span class="card-tag">Gacha</span>
+                <span class="card-tag">RPG</span>
+                <h3 class="card-title">Slime Slayer</h3>
+                <p class="card-text">สวมบทจอมดาบออกปราบฝูงสไลม์บุกเมือง โจมตีลด HP ของมอนสเตอร์ลงให้เป็น 0</p>
+                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
+            </div>
+        </div>
+
+        <!-- เกมที่ 6 (RPG) -->
+        <div class="card rpg" onclick="openGame('dungeon')">
+            <div class="card-img-placeholder">🐲</div>
+            <div class="card-content">
+                <span class="card-tag">RPG</span>
+                <h3 class="card-title">Dungeon Clicker</h3>
+                <p class="card-text">บุกตะลุยดันเจี้ยนมังกรเพลิง คลิกโจมตีบอสใหญ่เพื่อฟาร์มเหรียญทองมาอัปเกรดพลัง</p>
