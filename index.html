@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Zone - คลังเกมสุดมันส์</title>
+    <title>Warp Game Arcade - คลังมินิเกมสุดมันส์</title>
     <style>
         /* 1. Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Kanit', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -27,8 +27,6 @@
             text-align: center;
             padding: 4rem 1rem;
             margin-bottom: 2.5rem;
-            position: relative;
-            overflow: hidden;
         }
 
         header h1 {
@@ -65,7 +63,6 @@
             transition: all 0.2s ease;
         }
 
-        /* Hover Effect สำหรับปุ่ม */
         .btn:hover, .btn.active {
             background-color: #a855f7;
             color: white;
@@ -76,7 +73,7 @@
         /* 4. Gallery & Cards Style (CSS Grid) */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2.5rem;
             max-width: 1200px;
             margin: 0 auto;
@@ -92,29 +89,29 @@
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
         /* Hover Effect สำหรับการ์ดข้อมูล */
         .card:hover {
             transform: translateY(-8px);
             border-color: #a855f7;
-            box-shadow: 0 12px 30px rgba(168, 85, 247, 0.2);
+            box-shadow: 0 12px 30px rgba(168, 85, 247, 0.3);
         }
 
         .card-img-placeholder {
             width: 100%;
-            height: 160px;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3.5rem;
         }
 
-        /* สลับสีพื้นหลังการ์ดเพื่อความสวยงามตามหมวดหมู่ */
-        .card.rpg .card-img-placeholder { background: linear-gradient(45deg, #ef4444, #f59e0b); }
+        /* สลับสีพื้นหลังการ์ดแยกตามหมวดหมู่ */
         .card.casual .card-img-placeholder { background: linear-gradient(45deg, #10b981, #3b82f6); }
         .card.gacha .card-img-placeholder { background: linear-gradient(45deg, #ec4899, #8b5cf6); }
+        .card.rpg .card-img-placeholder { background: linear-gradient(45deg, #ef4444, #f59e0b); }
 
         .card-content {
             padding: 1.5rem;
@@ -132,54 +129,92 @@
             border-radius: 4px;
             font-weight: bold;
             margin-bottom: 0.8rem;
-            border: 1px solid #475569;
         }
 
         .card-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
             color: #f1f5f9;
         }
 
         .card-text {
             color: #94a3b8;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 1.5rem;
             flex-grow: 1;
         }
 
-        /* 5. Play Zone (ระบบเล่นเกมด้านในการ์ด) */
-        .play-zone {
-            background-color: #0f172a;
-            border-radius: 8px;
-            padding: 1rem;
+        .play-now-btn {
+            background-color: #a855f7;
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-weight: bold;
             text-align: center;
-            border: 1px dashed #475569;
+            margin-top: auto;
         }
 
-        .game-btn {
+        /* 5. Pop-up Game Window (Modal) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background-color: #1e293b;
+            border: 2px solid #a855f7;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        .close-btn:hover { color: #ef4444; }
+
+        /* สไตล์ปุ่มและองค์ประกอบภายในตู้เกมจำลอง */
+        .game-screen {
+            background-color: #0f172a;
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            margin: 1.5rem 0;
+            border: 1px dashed #475569;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-action-btn {
             background-color: #10b981;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
             font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 0.5rem;
-            width: 100%;
-            transition: background 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            width: 80%;
         }
-
-        .game-btn:hover {
-            background-color: #059669;
-        }
-
-        .game-status {
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            color: #38bdf8;
-            font-weight: bold;
-        }
+        .game-action-btn:hover { background-color: #059669; }
 
         /* Responsive Design */
         @media (max-width: 480px) {
@@ -190,13 +225,13 @@
 </head>
 <body>
 
-    <!-- 1. ส่วนหัวเว็บ (Header) -->
+    <!-- ส่วนหัวเว็บ (Header) -->
     <header>
         <h1>Warp Game Arcade 🎮</h1>
-        <p>ศูนย์รวมมินิเกมสุดเพลิน กดกรองหมวดหมู่ และคลิกเล่นเกมได้ทันที!</p>
+        <p>คลังมินิเกมสุดมันส์ กรองหมวดหมู่และคลิกการ์ดเพื่อเปิดเล่นเกมได้เลย!</p>
     </header>
 
-    <!-- 2. ปุ่มสำหรับกรองหมวดหมู่ (Filter Buttons) -->
+    <!-- ปุ่มกรองหมวดหมู่ (Filter Buttons) -->
     <div class="filter-container">
         <button class="btn active" onclick="filterSelection('all')">ทั้งหมด</button>
         <button class="btn" onclick="filterSelection('casual')">เกมเล่นชิลๆ (Casual)</button>
@@ -204,82 +239,66 @@
         <button class="btn" onclick="filterSelection('rpg')">เกมต่อสู้ (RPG)</button>
     </div>
 
-    <!-- 3. การ์ดข้อมูล/ระบบเกม (Gallery - 6 ชิ้น) -->
+    <!-- คลังการ์ดเกม (Gallery - 8 ชิ้นจุใจ) -->
     <main class="gallery">
         
-        <!-- ชิ้นที่ 1: เกมคลิกนับคะแนน (Casual) -->
-        <div class="card casual">
+        <!-- เกมที่ 1 (Casual) -->
+        <div class="card casual" onclick="openGame('cookie')">
             <div class="card-img-placeholder">🍪</div>
             <div class="card-content">
                 <span class="card-tag">Casual</span>
                 <h3 class="card-title">Cookie Clicker Sim</h3>
-                <p class="card-text">เกมเล่นเรื่อยๆ ปลุกพลังนิ้วของคุณ กดคลิกที่ปุ่มด้านล่างเพื่อเพิ่มคะแนนคุกกี้ของคุณให้ได้มากที่สุด!</p>
-                <div class="play-zone">
-                    <div class="game-status" id="cookie-status">คุกกี้ทั้งหมด: 0 ชิ้น</div>
-                    <button class="game-btn" onclick="playCookie()">อบคุกกี้! 🍪</button>
-                </div>
+                <p class="card-text">เกมคลิกนิ้วรัวๆ กดอบคุกกี้เพื่อทำลายสถิติโลกและสะสมแต้มให้ได้มากที่สุด!</p>
+                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
             </div>
         </div>
 
-        <!-- ชิ้นที่ 2: เกมสุ่มกาชาปอง (Gacha) -->
-        <div class="card gacha">
+        <!-- เกมที่ 2 (Casual) -->
+        <div class="card casual" onclick="openGame('typer')">
+            <div class="card-img-placeholder">⌨️</div>
+            <div class="card-content">
+                <span class="card-tag">Casual</span>
+                <h3 class="card-title">Speed Typer</h3>
+                <p class="card-text">ทดสอบความเร็วในการพิมพ์ข้อความตามที่กำหนด แข่งกับเวลาอันแสนสั้น</p>
+                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
+            </div>
+        </div>
+
+        <!-- เกมที่ 3 (Casual) -->
+        <div class="card casual" onclick="openGame('timer')">
+            <div class="card-img-placeholder">⏱️</div>
+            <div class="card-content">
+                <span class="card-tag">Casual</span>
+                <h3 class="card-title">Stopwatch 10.00s</h3>
+                <p class="card-text">เกมฝึกประสาทสัมผัส กดหยุดเวลาให้ใกล้เคียงกับ 10.00 วินาทีพอดีเป๊ะ!</p>
+                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
+            </div>
+        </div>
+
+        <!-- เกมที่ 4 (Gacha) -->
+        <div class="card gacha" onclick="openGame('gachaHero')">
             <div class="card-img-placeholder">💎</div>
             <div class="card-content">
                 <span class="card-tag">Gacha</span>
-                <h3 class="card-title">Lucky Gacha Star</h3>
-                <p class="card-text">วัดระดับดวงของคุณวันนี้! กดสุ่มเพื่อหาตัวละครระดับตำนาน (SSR) คุณจะใช้กี่สัญชาตญาณในการหาดวงดี?</p>
-                <div class="play-zone">
-                    <div class="game-status" id="gacha-status">กดเพื่อลุ้นรับรางวัล!</div>
-                    <button class="game-btn" style="background-color: #ec4899;" onclick="playGacha()">สุ่มกาชาสิ! 🎲</button>
-                </div>
+                <h3 class="card-title">Gacha Hero Arena</h3>
+                <p class="card-text">ตามหาฮีโร่ในตำนาน! กดสุ่มเพื่อสะสมการ์ดระดับ UR และ SSR เพื่อวัดระดับดวง</p>
+                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
             </div>
         </div>
 
-        <!-- ชิ้นที่ 3: เกมตีมอนสเตอร์ (RPG) -->
-        <div class="card rpg">
-            <div class="card-img-placeholder">👾</div>
-            <div class="card-content">
-                <span class="card-tag">RPG</span>
-                <h3 class="card-title">Slime Slayer</h3>
-                <p class="card-text">เจ้าสไลม์บุกหมู่บ้านแล้ว! สวมบทบาทเป็นอัศวินผู้กล้า กดโจมตีเพื่อลดเลือด (HP) ของมันลงให้เหลือ 0</p>
-                <div class="play-zone">
-                    <div class="game-status" id="slime-status">สไลม์ HP: 50/50</div>
-                    <button class="game-btn" style="background-color: #ef4444;" onclick="playSlayer()">โจมตีฟันดาบ! ⚔️</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ชิ้นที่ 4: การ์ดแนะนำเกมแนว Casual อื่นๆ -->
-        <div class="card casual">
-            <div class="card-img-placeholder">🧩</div>
-            <div class="card-content">
-                <span class="card-tag">Casual</span>
-                <h3 class="card-title">Tetris Classic</h3>
-                <p class="card-text">เกมต่อบล็อกในตำนานที่ครองใจคนทั่วโลก ช่วยฝึกสมอง ไหวพริบ และการวางแผนพื้นที่อย่างมีประสิทธิภาพ</p>
-                <div class="play-zone"><span style="color: #64748b;">(ข้อมูลแนะนำเกมน่าสนใจ)</span></div>
-            </div>
-        </div>
-
-        <!-- ชิ้นที่ 5: การ์ดแนะนำเกมแนว Gacha อื่นๆ -->
-        <div class="card gacha">
-            <div class="card-img-placeholder">🌌</div>
+        <!-- เกมที่ 5 (Gacha) -->
+        <div class="card gacha" onclick="openGame('luckyBox')">
+            <div class="card-img-placeholder">🎁</div>
             <div class="card-content">
                 <span class="card-tag">Gacha</span>
-                <h3 class="card-title">Galaxy Waifu Space</h3>
-                <p class="card-text">ออกท่องจักรวาลพร้อมการสะสมเหล่านักรบอวกาศสุดเท่ ปลดล็อกเนื้อเรื่องและอัปเกรดการจัดทีมยานรบ</p>
-                <div class="play-zone"><span style="color: #64748b;">(ข้อมูลแนะนำเกมน่าสนใจ)</span></div>
+                <h3 class="card-title">Lucky Box</h3>
+                <p class="card-text">กล่องสุ่มปริศนา เลือกกล่องนำโชคเพื่อลุ้นเงินรางวัลแจ็กพอตมหาศาล</p>
+                <div class="play-now-btn">กดเพื่อเล่นเกม 🎮</div>
             </div>
         </div>
 
-        <!-- ชิ้นที่ 6: การ์ดแนะนำเกมแนว RPG อื่นๆ -->
-        <div class="card rpg">
-            <div class="card-img-placeholder">🐲</div>
+        <!-- เกมที่ 6 (Gacha) -->
+        <div class="card gacha" onclick="openGame('wheel')">
+            <div class="card-img-placeholder">🎡</div>
             <div class="card-content">
-                <span class="card-tag">RPG</span>
-                <h3 class="card-title">Dragon Dungeon</h3>
-                <p class="card-text">ผจญภัยในคุกใต้ดินลึก 100 ชั้น ค้นหาสมบัติโบราณ ต่อสู้กับมังกรเพลิง และอัปเกรดอาวุธชุดเกราะในตำนาน</p>
-                <div class="play-zone"><span style="color: #64748b;">(ข้อมูลแนะนำเกมน่าสนใจ)</span></div>
-            </div>
-        </div>
-
-    </main>
+                <span class="card-tag">Gacha</span>
