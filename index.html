@@ -1,1 +1,219 @@
 
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAME WORLD 🎮</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #171329;
+    color: white;
+}
+
+header {
+    text-align: center;
+    padding: 70px 20px;
+    background: linear-gradient(135deg, #a56bff, #34205e);
+}
+
+header h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+header p {
+    font-size: 17px;
+    color: #eee0ff;
+}
+
+.filter {
+    text-align: center;
+    padding: 35px 15px;
+}
+
+.filter button {
+    padding: 12px 25px;
+    margin: 6px;
+    border: none;
+    border-radius: 30px;
+    background: #30264e;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter button:hover,
+.filter button.active {
+    background: #c49aff;
+    color: #24143e;
+    transform: translateY(-4px);
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: #29213f;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px #0008;
+}
+
+.card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+.card h3 {
+    padding: 15px 15px 5px;
+    color: #c6a7ff;
+}
+
+.card p {
+    padding: 5px 15px 20px;
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.card.hide {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #aaa;
+    margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎮 GAME WORLD</h1>
+    <p>โลกแห่งเกม รวมเกมสนุก ๆ ที่คุณไม่ควรพลาด</p>
+</header>
+
+<section class="filter">
+    <button class="active" onclick="filterGame('all', this)">ทั้งหมด</button>
+    <button onclick="filterGame('adventure', this)">🌍 ผจญภัย</button>
+    <button onclick="filterGame('action', this)">⚔️ แอ็กชัน</button>
+    <button onclick="filterGame('simulation', this)">🏡 จำลองชีวิต</button>
+</section>
+
+<section class="gallery">
+
+    <div class="card" data-category="adventure">
+        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600" alt="Minecraft">
+        <h3>Minecraft</h3>
+        <p>เกมสร้างโลกและออกผจญภัยสุดสร้างสรรค์</p>
+    </div>
+
+    <div class="card" data-category="action">
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600" alt="Valorant">
+        <h3>Valorant</h3>
+        <p>เกมยิงปืนแข่งขันที่ต้องใช้ทักษะและทีมเวิร์ก</p>
+    </div>
+
+    <div class="card" data-category="simulation">
+        <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=600" alt="The Sims">
+        <h3>The Sims</h3>
+        <p>เกมจำลองชีวิตที่สามารถสร้างตัวละครได้เอง</p>
+    </div>
+
+    <div class="card" data-category="adventure">
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" alt="Adventure">
+        <h3>Adventure World</h3>
+        <p>ออกสำรวจโลกกว้างและค้นหาสิ่งใหม่ ๆ</p>
+    </div>
+
+    <div class="card" data-category="action">
+        <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=600" alt="Action Hero">
+        <h3>Action Hero</h3>
+        <p>เกมต่อสู้สุดมันส์สำหรับคนชอบความท้าทาย</p>
+    </div>
+
+    <div class="card" data-category="simulation">
+        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600" alt="Life Simulator">
+        <h3>Life Simulator</h3>
+        <p>จำลองการใช้ชีวิตและสร้างโลกในแบบของคุณ</p>
+    </div>
+
+</section>
+
+<footer>
+    <p>© 2026 GAME WORLD | My Website Project</p>
+    <p>จัดทำเพื่อการศึกษา</p>
+</footer>
+
+<script>
+function filterGame(category, button) {
+
+    let cards = document.querySelectorAll('.card');
+    let buttons = document.querySelectorAll('.filter button');
+
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    button.classList.add('active');
+
+    cards.forEach(card => {
+
+        if (category === 'all' ||
+            card.dataset.category === category) {
+
+            card.classList.remove('hide');
+
+        } else {
+
+            card.classList.add('hide');
+
+        }
+
+    });
+}
+</script>
+
+</body>
+</html>
+
